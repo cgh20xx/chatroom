@@ -1,4 +1,4 @@
-import "./index.css";
-import { name } from "@/utils";
+import './index.css';
+import { name } from '@/utils';
 
-console.log("client side chatroom page", name);
+console.log('client side chatroom page', name);

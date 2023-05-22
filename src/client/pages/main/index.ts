@@ -1,4 +1,4 @@
-import "./index.css";
-import { name } from "@/utils";
+import './index.css';
+import { name } from '@/utils';
 
-console.log("client side main page", name);
+console.log('client side main page', name);
