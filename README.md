@@ -14,7 +14,7 @@ npm i
 npm run dev
 ```
 
-[localhost:3000/main](localhost:3000/main)
+[http://localhost:3000/main](http://localhost:3000/main)
 
 ## 上線前編譯專案
 
