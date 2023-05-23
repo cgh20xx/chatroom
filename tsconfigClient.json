@@ -5,8 +5,10 @@
     "module": "es6",
     "target": "es6",    
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    // 相容性處理 (針對 CommonJS)
+    "esModuleInterop": true, // 讓 ts 有能力 import CommonJS 模組
+    "allowSyntheticDefaultImports": true, // 通常配合讓 esModuleInterop: true 使用，讓 import CommonJS 不需使用 as 別名也能用
+
     "allowJs": true,
     "sourceMap": true,
     "strictNullChecks": true,
