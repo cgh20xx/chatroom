@@ -14,7 +14,9 @@ const server = http.createServer(app)
 // 建立 socket.io Server
 const io = new Server(server)
 
+// 偵聽 client 端的連線
 io.on('connection',  (socket) => {
+  console.log('socket from client:', socket.id);
   socket.emit('join', 'welcome')
 })
 
