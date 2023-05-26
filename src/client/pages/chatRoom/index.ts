@@ -1,10 +1,7 @@
 import './index.css';
-import { name } from '@/utils';
-
 import { io } from 'socket.io-client'
 
-console.log('client side chatroom page', name);
-
+// 1. 建立 socket 連線
 const clientIo = io()
 
 clientIo.on('join', msg => {
