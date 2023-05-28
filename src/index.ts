@@ -18,6 +18,11 @@ const io = new Server(server)
 io.on('connection',  (socket) => {
   console.log('socket from client:', socket.id);
   socket.emit('join', 'welcome')
+
+  // 偵聽前端的 chat 事件
+  socket.on('chat', (msg) => {
+    console.log('server 接收:', msg);
+  })
 })
 
 // 執行npm run dev本地開發 or 執行npm run start部署後啟動線上伺服器

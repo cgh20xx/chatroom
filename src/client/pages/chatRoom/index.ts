@@ -1,6 +1,9 @@
 import './index.css';
 import { io } from 'socket.io-client'
 
+// 1. 建立 socket 連線
+const clientIo = io()
+
 // 取得網址  queryString 的使用者名稱及房間名稱
 const url = new URL(location.href);
 const userName = url.searchParams.get('user_name')
@@ -17,12 +20,12 @@ const btnSubmit = document.getElementById('btnSubmit') as HTMLInputElement
 
 btnSubmit.addEventListener('click', (e) => {
   const text = inputText.value
-  console.log('send:', text);
+  // 將訊息發送到後端
+  clientIo.emit('chat', text)
 });
 
 
-// 1. 建立 socket 連線
-const clientIo = io()
+
 
 clientIo.on('join', msg => {
   console.log('msg from server:', msg);
