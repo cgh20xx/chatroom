@@ -17,7 +17,10 @@ if (!userName || !roomName) {
 const inputText = document.getElementById('inputText') as HTMLInputElement
 const btnSubmit = document.getElementById('btnSubmit') as HTMLInputElement
 const chatBoard = document.getElementById('chatBoard') as HTMLDivElement
+const headerRoomName = document.getElementById('headerRoomName') as HTMLParagraphElement
 // 用 as 斷言成指定型別，否則 getElementById 預設為 HTMLElement | null 的聯合型別，之後也無法正確提示屬性。
+
+headerRoomName.textContent = roomName
 
 function msgHandler(msg: string) {
   
