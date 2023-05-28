@@ -36,13 +36,19 @@ function msgHandler(msg: string) {
     </div>
   </div>`
   chatBoard.appendChild(msgBox)
+  // 將聊天室的捲軸下拉到最後一筆訊息 (當很多訊息時會有捲軸)
+  chatBoard.scrollTop = chatBoard.scrollHeight
 }
 
 
 btnSubmit.addEventListener('click', (e) => {
   const text = inputText.value
+  // 如果輸入框沒有內容則跳出
+  if (text === '') return;
   // 將訊息發送到後端
   clientIo.emit('chat', text)
+  // 清空輪入框
+  inputText.value = ''
 });
 
 
