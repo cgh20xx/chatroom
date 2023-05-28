@@ -17,11 +17,13 @@ const io = new Server(server)
 // 偵聽 client 端的連線
 io.on('connection',  (socket) => {
   console.log('socket from client:', socket.id);
+  // 發送 join 事件到單一前端
   socket.emit('join', 'welcome')
 
   // 偵聽前端的 chat 事件
   socket.on('chat', (msg) => {
-    console.log('server 接收:', msg);
+    // 廣播 chat 事件到所有前端
+    io.emit('chat', msg)
   })
 })
 

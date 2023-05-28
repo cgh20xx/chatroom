@@ -26,7 +26,12 @@ btnSubmit.addEventListener('click', (e) => {
 
 
 
+// 偵聽後端來的 join 事件
+clientIo.on('join', (msg) => {
+  console.log('join from server:', msg);
+})
 
-clientIo.on('join', msg => {
+// 偵聽後端來的 chat 事件
+clientIo.on('chat', (msg) => {
   console.log('msg from server:', msg);
 })
