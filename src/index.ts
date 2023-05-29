@@ -1,11 +1,12 @@
-import devServer from './server/dev';
-import prodServer from './server/prod';
-import express from 'express';
+import devServer from '@/server/dev'
+import prodServer from '@/server/prod'
+import express from 'express'
 // import socket.io 和 http
 import { Server } from 'socket.io'
 import http from 'http'
+import UserService from '@/service/UserService'
 
-import { name } from '@/utils';
+import { name } from '@/utils'
 
 const port = 3000;
 const app = express();
@@ -13,6 +14,8 @@ const app = express();
 const server = http.createServer(app)
 // 建立 socket.io Server
 const io = new Server(server)
+// 建立 UserService 管理所有使用者資訊
+const userService = new UserService()
 
 // 偵聽 client 端的連線
 io.on('connection',  (socket) => {

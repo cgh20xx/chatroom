@@ -30,4 +30,12 @@ export default class UserService {
     return user || null
   }
 
+  userDataInfoHandler(id: string, userName: string, roomName: string): UserData {
+    return {
+      id,
+      userName,
+      roomName
+    }
+  }
+
 }
