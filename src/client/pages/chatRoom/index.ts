@@ -14,6 +14,8 @@ if (!userName || !roomName) {
   location.href = '/main/main.html'
 }
 
+clientIo.emit('join', `${userName} 加入聊天室`)
+
 const inputText = document.getElementById('inputText') as HTMLInputElement
 const btnSubmit = document.getElementById('btnSubmit') as HTMLInputElement
 const chatBoard = document.getElementById('chatBoard') as HTMLDivElement
