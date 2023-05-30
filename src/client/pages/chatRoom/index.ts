@@ -46,6 +46,14 @@ function msgHandler(msg: string) {
   chatBoard.scrollTop = chatBoard.scrollHeight
 }
 
+function joinMsgHandler(msg: string) {
+  const div = document.createElement('div')
+  div.classList.add('flex', 'justify-center', 'mb-4', 'items-center')
+  div.innerHTML = `<p class="text-gray-700 text-sm">${msg}</p>`
+  chatBoard.appendChild(div)
+  chatBoard.scrollTop = chatBoard.scrollHeight
+}
+
 
 btnSubmit.addEventListener('click', (e) => {
   const text = inputText.value
@@ -66,6 +74,7 @@ btnBack.addEventListener('click', (e) => {
 // 偵聽後端來的 join 事件
 clientIo.on('join', (msg: string) => {
   console.log('join from server:', msg);
+  joinMsgHandler(msg)
 })
 
 // 偵聽後端來的 chat 事件
