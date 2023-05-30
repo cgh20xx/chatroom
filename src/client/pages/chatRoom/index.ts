@@ -46,7 +46,7 @@ function msgHandler(msg: string) {
   chatBoard.scrollTop = chatBoard.scrollHeight
 }
 
-function joinMsgHandler(msg: string) {
+function roomMsgHandler(msg: string) {
   const div = document.createElement('div')
   div.classList.add('flex', 'justify-center', 'mb-4', 'items-center')
   div.innerHTML = `<p class="text-gray-700 text-sm">${msg}</p>`
@@ -74,7 +74,13 @@ btnBack.addEventListener('click', (e) => {
 // 偵聽後端來的 join 事件
 clientIo.on('join', (msg: string) => {
   console.log('join from server:', msg);
-  joinMsgHandler(msg)
+ roomMsgHandler(msg)
+})
+
+// 偵聽後端來的 leave 事件
+clientIo.on('leave', (msg: string) => {
+  console.log('leave from server:', msg);
+ roomMsgHandler(msg)
 })
 
 // 偵聽後端來的 chat 事件

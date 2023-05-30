@@ -26,6 +26,12 @@ io.on('connection',  (socket) => {
     io.emit('join', msg)
   })
 
+  // 偵聽內建的 disconnect 事件
+  socket.on('disconnect', (msg) => {
+    // 廣播 chat 事件到所有前端
+    io.emit('leave', '有用戶離開聊天室')
+  })
+
   // 偵聽前端的 chat 事件
   socket.on('chat', (msg) => {
     // 廣播 chat 事件到所有前端
