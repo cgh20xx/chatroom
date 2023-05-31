@@ -27,9 +27,11 @@ io.on('connection',  (socket) => {
       userName,
       roomName
     )
+    // 加入房間機制
+    socket.join(usesrData.roomName)
     userService.addUser(usesrData)
-    // 廣播 join 事件到所有前端
-    io.emit('join', `${userName} 加入了  ${roomName} 聊天室`)
+    // 廣播 join 事件到該房間的前端
+    socket.broadcast.to(usesrData.roomName).emit('join', `${userName} 加入了  ${roomName} 聊天室`)
   })
 
   // 偵聽內建的 disconnect 事件
