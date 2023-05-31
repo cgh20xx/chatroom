@@ -40,7 +40,7 @@ io.on('connection',  (socket) => {
     const userName = userData?.userName
     if (userName) {
       // 廣播 leave 事件到該房間的前端 (broadcast 不含自己)
-      socket.broadcast.to(userData.roomName).emit('leave', `${userName} 離開聊天室`)
+      socket.broadcast.to(userData.roomName).emit('leave', `${userName} 離開 ${userData.roomName} 聊天室`)
     }
     userService.removeUser(socket.id)
   })
