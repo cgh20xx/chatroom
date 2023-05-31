@@ -22,16 +22,16 @@ io.on('connection',  (socket) => {
   console.log('socket from client:', socket.id);
   // 偵聽前端的 join 事件
   socket.on('join', ({ userName, roomName}: { userName: string, roomName: string}) => {
-    const usesrData = userService.userDataInfoHandler(
+    const userData = userService.userDataInfoHandler(
       socket.id,
       userName,
       roomName
     )
     // 加入房間機制
-    socket.join(usesrData.roomName)
-    userService.addUser(usesrData)
+    socket.join(userData.roomName)
+    userService.addUser(userData)
     // 廣播 join 事件到該房間的前端
-    socket.broadcast.to(usesrData.roomName).emit('join', `${userName} 加入了  ${roomName} 聊天室`)
+    socket.broadcast.to(userData.roomName).emit('join', `${userName} 加入了  ${roomName} 聊天室`)
   })
 
   // 偵聽內建的 disconnect 事件
@@ -40,7 +40,7 @@ io.on('connection',  (socket) => {
     const userName = userData?.userName
     if (userName) {
       // 廣播 leave 事件到所有前端
-      io.emit('leave', `${userName} 離開聊天室`)
+      socket.broadcast.emit('leave', `${userName} 離開聊天室`)
     }
     userService.removeUser(socket.id)
   })
