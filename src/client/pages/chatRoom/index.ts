@@ -46,7 +46,7 @@ function msgHandler(data: UserMsgData) {
       <div>
         <p class="text-xs text-white mb-1 text-right">${data.userName}</p>
         <p
-          class="mx-w-[50%] break-all bg-white px-4 py-2 rounded-bl-full rounded-br-full rounded-tl-full"
+          class="mx-w-[50%] break-all bg-white px-4 py-2 rounded-bl-2xl rounded-br-2xl rounded-tl-2xl"
         >
           ${data.msg}
         </p>
@@ -59,7 +59,7 @@ function msgHandler(data: UserMsgData) {
     `<div>
       <p class="text-xs text-gray-700 mb-1">${data.userName}</p>
       <p
-        class="mx-w-[50%] break-all bg-gray-800 px-4 py-2 rounded-tr-full rounded-br-full rounded-tl-full text-white"
+        class="mx-w-[50%] break-all bg-gray-800 px-4 py-2 rounded-tr-2xl rounded-br-2xl rounded-bl-2xl text-white"
       >
         ${data.msg}
       </p>
