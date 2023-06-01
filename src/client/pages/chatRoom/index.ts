@@ -2,7 +2,10 @@ import './index.css';
 import { io } from 'socket.io-client'
 import { UserData, default as UserService } from '@/service/UserService'
 
-type UserMsgData = UserData & { msg: string } // 擴充 type UserData, 新增 msg
+type UserMsgData = UserData & { 
+  msg: string,
+  time: number
+} // 擴充 type UserData, 新增 msg
 
 // 1. 建立 socket 連線
 const socket = io()
@@ -29,6 +32,8 @@ const btnBack = document.getElementById('btnBack') as HTMLButtonElement
 headerRoomName.textContent = roomName
 
 function msgHandler(data: UserMsgData) {
+  const date = new Date(data.time)
+  const time = `${date.getHours()}:${date.getMinutes()}`
   
   const msgBox = document.createElement('div')
   msgBox.classList.add('flex', 'mb-4', 'items-end')
@@ -37,7 +42,7 @@ function msgHandler(data: UserMsgData) {
     msgBox.classList.add('justify-end')
     msgBox.innerHTML = 
     `<div class="flex justify-end mb-4 items-end">
-      <p class="text-xs text-gray-700 mr-4">00:00</p>
+      <p class="text-xs text-gray-700 mr-4">${time}</p>
       <div>
         <p class="text-xs text-white mb-1 text-right">${data.userName}</p>
         <p
@@ -59,7 +64,7 @@ function msgHandler(data: UserMsgData) {
         ${data.msg}
       </p>
     </div>
-    <p class="text-xs text-gray-700 ml-4">00:00</p>`
+    <p class="text-xs text-gray-700 ml-4">${time}</p>`
   }
   
   chatBoard.appendChild(msgBox)

@@ -49,9 +49,10 @@ io.on('connection',  (socket) => {
   socket.on('chat', (msg) => {
     const userData = userService.getUser(socket.id)
     const roomName = userData?.roomName
+    const time = Date.now()
     if (roomName) {
       // 用 io 廣播 chat 事件到所有前端 (含自己)
-      io.to(roomName).emit('chat', { ...userData, msg })
+      io.to(roomName).emit('chat', { ...userData, msg, time })
       // 注意：不可用 socket.to 因為送出訊息不含自己
       // 注意：沒有 io.broadcast 這種寫法
     }
