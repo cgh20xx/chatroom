@@ -30,7 +30,7 @@ io.on('connection',  (socket) => {
     // 加入房間機制
     socket.join(userData.roomName)
     userService.addUser(userData)
-    // 廣播 join 事件到該房間的前端 (broadcast 不含自己)
+    // 廣播 join 事件到該房間的前端 (broadcast 不含自己，這這邊不寫 brodcast 也沒關係，因為 socket.to 就不含自己)
     socket.broadcast.to(userData.roomName).emit('join', `${userName} 加入了  ${roomName} 聊天室`)
   })
 
@@ -39,7 +39,7 @@ io.on('connection',  (socket) => {
     const userData = userService.getUser(socket.id)
     const userName = userData?.userName
     if (userName) {
-      // 廣播 leave 事件到該房間的前端 (broadcast 不含自己)
+      // 廣播 leave 事件到該房間的前端 (broadcast 不含自己，這這邊不寫 brodcast 也沒關係，因為 socket.to 就不含自己)
       socket.broadcast.to(userData.roomName).emit('leave', `${userName} 離開 ${userData.roomName} 聊天室`)
     }
     userService.removeUser(socket.id)
@@ -47,8 +47,14 @@ io.on('connection',  (socket) => {
 
   // 偵聽前端的 chat 事件
   socket.on('chat', (msg) => {
-    // 廣播 chat 事件到所有前端
-    io.emit('chat', msg)
+    const userData = userService.getUser(socket.id)
+    const roomName = userData?.roomName
+    if (roomName) {
+      // 用 io 廣播 chat 事件到所有前端 (含自己)
+      io.to(roomName).emit('chat', msg)
+      // 注意：不可用 socket.to 因為送出訊息不含自己
+      // 注意：沒有 io.broadcast 這種寫法
+    }
   })
 })
 
