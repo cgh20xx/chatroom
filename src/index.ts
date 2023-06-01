@@ -21,7 +21,7 @@ const userService = new UserService()
 io.on('connection',  (socket) => {
   console.log('socket from client:', socket.id);
   // 偵聽前端的 join 事件
-  socket.on('join', ({ userName, roomName}: { userName: string, roomName: string}) => {
+  socket.on('join', async ({ userName, roomName}: { userName: string, roomName: string}) => {
     const userData = userService.userDataInfoHandler(
       socket.id,
       userName,
@@ -30,17 +30,32 @@ io.on('connection',  (socket) => {
     // 加入房間機制
     socket.join(userData.roomName)
     userService.addUser(userData)
+
     // 廣播 join 事件到該房間的前端 (broadcast 不含自己，這這邊不寫 brodcast 也沒關係，因為 socket.to 就不含自己)
-    socket.broadcast.to(userData.roomName).emit('join', `${userName} 加入了  ${roomName} 聊天室`)
+    const joinMsg = `${userName} 加入了  ${roomName} 聊天室`
+    socket.broadcast.to(userData.roomName).emit('join', joinMsg)
+
+    // 取得指定聊天室人數
+    const sockets = await io.in(userData.roomName).fetchSockets();
+    const headCount = sockets.length
+    // 廣播聊天室人數到該房間的前端
+    io.to(userData.roomName).emit('headCount', headCount)
   })
 
   // 偵聽內建的 disconnect 事件
-  socket.on('disconnect', (msg) => {
+  socket.on('disconnect', async (msg) => {
     const userData = userService.getUser(socket.id)
-    const userName = userData?.userName
-    if (userName) {
+
+    if (userData) {
       // 廣播 leave 事件到該房間的前端 (broadcast 不含自己，這這邊不寫 brodcast 也沒關係，因為 socket.to 就不含自己)
-      socket.broadcast.to(userData.roomName).emit('leave', `${userName} 離開 ${userData.roomName} 聊天室`)
+      const leaveMsg = `${userData.userName} 離開 ${userData.roomName} 聊天室`
+      socket.broadcast.to(userData.roomName).emit('leave', leaveMsg)
+
+      // 取得指定聊天室人數
+      const sockets = await io.in(userData.roomName).fetchSockets();
+      const headCount = sockets.length
+      // 廣播聊天室人數到該房間的前端
+      io.to(userData.roomName).emit('headCount', headCount)
     }
     userService.removeUser(socket.id)
   })
