@@ -1,8 +1,10 @@
 # Chatroom
 
+Node.js 版本 v16.x.x
+
 ## 如何使用？
 
-1. 進入專案目錄，先安裝node_module依賴
+1. 進入專案目錄，先安裝 node_module 依賴
 
 ```
 npm i
@@ -22,7 +24,7 @@ npm run dev
 npm run build
 ```
 
-## 上線後，在機器上執行prod.ts
+## 上線後，在機器上執行 prod.ts
 
 ```
 npm run start
