@@ -1,5 +1,8 @@
 import './index.css';
 import { io } from 'socket.io-client'
+import { UserData, default as UserService } from '@/service/UserService'
+
+type UserMsgData = UserData & { msg: string } // 擴充 type UserData, 新增 msg
 
 // 1. 建立 socket 連線
 const socket = io()
@@ -25,22 +28,40 @@ const btnBack = document.getElementById('btnBack') as HTMLButtonElement
 
 headerRoomName.textContent = roomName
 
-function msgHandler(msg: string) {
+function msgHandler(data: UserMsgData) {
   
   const msgBox = document.createElement('div')
-  msgBox.classList.add('flex', 'justify-end', 'mb-4', 'items-end')
-  msgBox.innerHTML = 
-  `<div class="flex justify-end mb-4 items-end">
-    <p class="text-xs text-gray-700 mr-4">00:00</p>
-    <div>
-      <p class="text-xs text-white mb-1 text-right">hank</p>
+  msgBox.classList.add('flex', 'mb-4', 'items-end')
+  // 如果收到訊息的 socket id 和自己的 socket id 一樣的話，訊息顯示在右側
+  if (data.id === socket.id) {
+    msgBox.classList.add('justify-end')
+    msgBox.innerHTML = 
+    `<div class="flex justify-end mb-4 items-end">
+      <p class="text-xs text-gray-700 mr-4">00:00</p>
+      <div>
+        <p class="text-xs text-white mb-1 text-right">${data.userName}</p>
+        <p
+          class="mx-w-[50%] break-all bg-white px-4 py-2 rounded-bl-full rounded-br-full rounded-tl-full"
+        >
+          ${data.msg}
+        </p>
+      </div>
+    </div>`
+  } else {
+    // 否則訊息顯示在左側
+    msgBox.classList.add('justify-start')
+    msgBox.innerHTML = 
+    `<div>
+      <p class="text-xs text-gray-700 mb-1">${data.userName}</p>
       <p
-        class="mx-w-[50%] break-all bg-white px-4 py-2 rounded-bl-full rounded-br-full rounded-tl-full"
+        class="mx-w-[50%] break-all bg-gray-800 px-4 py-2 rounded-tr-full rounded-br-full rounded-tl-full text-white"
       >
-        ${msg}
+        ${data.msg}
       </p>
     </div>
-  </div>`
+    <p class="text-xs text-gray-700 ml-4">00:00</p>`
+  }
+  
   chatBoard.appendChild(msgBox)
   // 將聊天室的捲軸下拉到最後一筆訊息 (當很多訊息時會有捲軸)
   chatBoard.scrollTop = chatBoard.scrollHeight
@@ -90,7 +111,7 @@ socket.on('leave', (msg: string) => {
 })
 
 // 偵聽後端來的 chat 事件
-socket.on('chat', (msg: string) => {
-  console.log('msg from server:', msg);
-  msgHandler(msg);
+socket.on('chat', (data: UserMsgData) => {
+  console.log('UserMsg from server:', data);
+  msgHandler(data);
 })

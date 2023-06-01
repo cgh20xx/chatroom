@@ -1,5 +1,5 @@
 // 使用者資訊
-type UserData = {
+export type UserData = {
   id: string
   userName: string
   roomName: string
