@@ -70,6 +70,10 @@ btnBack.addEventListener('click', (e) => {
 });
 
 
+clientIo.on('connect', () => {
+  console.log('clientIo is connect');
+  // 注意：不該在此偵聽其它事件，因為每次 Socket 重新連接時都會重新註冊一個新的 handler
+})
 
 // 偵聽後端來的 join 事件
 clientIo.on('join', (msg: string) => {
