@@ -2,7 +2,7 @@ import './index.css';
 import { io } from 'socket.io-client'
 
 // 1. 建立 socket 連線
-const clientIo = io()
+const socket = io()
 
 // 取得網址  queryString 的使用者名稱及房間名稱
 const url = new URL(location.href);
@@ -14,7 +14,7 @@ if (!userName || !roomName) {
   location.href = '/main/main.html'
 }
 
-clientIo.emit('join', { userName, roomName })
+socket.emit('join', { userName, roomName })
 
 const inputText = document.getElementById('inputText') as HTMLInputElement
 const btnSubmit = document.getElementById('btnSubmit') as HTMLInputElement
@@ -60,7 +60,7 @@ btnSubmit.addEventListener('click', (e) => {
   // 如果輸入框沒有內容則跳出
   if (text === '') return;
   // 將訊息發送到後端
-  clientIo.emit('chat', text)
+  socket.emit('chat', text)
   // 清空輪入框
   inputText.value = ''
 });
@@ -70,25 +70,27 @@ btnBack.addEventListener('click', (e) => {
 });
 
 
-clientIo.on('connect', () => {
-  console.log('clientIo is connect');
-  // 注意：不該在此偵聽其它事件，因為每次 Socket 重新連接時都會重新註冊一個新的 handler
+socket.on('connect', () => {
+  // 在連接之後才可以拿到後端傳來的 socket id
+  console.log('connected socket.id = ', socket.id);
+  // 注意1：不該在此偵聽其它事件，因為每次 Socket 重新連接時都會重新註冊一個新的 handler
+  // 注意2：這裡拿到的 socket.id 是暫時的，會因每次連線都不同，不能做為使用者的永久 id。
 })
 
 // 偵聽後端來的 join 事件
-clientIo.on('join', (msg: string) => {
+socket.on('join', (msg: string) => {
   console.log('join from server:', msg);
  roomMsgHandler(msg)
 })
 
 // 偵聽後端來的 leave 事件
-clientIo.on('leave', (msg: string) => {
+socket.on('leave', (msg: string) => {
   console.log('leave from server:', msg);
  roomMsgHandler(msg)
 })
 
 // 偵聽後端來的 chat 事件
-clientIo.on('chat', (msg: string) => {
+socket.on('chat', (msg: string) => {
   console.log('msg from server:', msg);
   msgHandler(msg);
 })
